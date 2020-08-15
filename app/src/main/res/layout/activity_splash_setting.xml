@@ -19,6 +19,7 @@
         android:layout_height="match_parent">
 
         <EditText
+            android:id="@+id/edt_url"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:hint="@string/splash_setting_connect_url"

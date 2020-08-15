@@ -10,19 +10,6 @@ import com.timmymike.json_server_android_assignment.R
 import com.timmymike.json_server_android_assignment.databinding.DialogTextBinding
 import com.timmymike.json_server_android_assignment.tools.setTextSize
 
-fun showMessageDialogOnlyOKButton(context: Context, message: String, lambda: () -> Unit = {}): TextDialog {
-    return TextDialog(context).apply {
-        title = message
-        dialogBinding.btnLift.visibility = View.GONE
-        dialogBinding.btnRight.text = context.getString(R.string.ok)
-        dialogBinding.btnRight.setOnClickListener {
-            lambda()
-            dialog.dismiss()
-        }
-        show()
-    }
-}
-
 fun showMessageDialogOnlyOKButton(context: Context, title: String, message: String, lambda: () -> Unit = {}): TextDialog {
     return TextDialog(context).apply {
         this.title = title
@@ -37,7 +24,6 @@ fun showMessageDialogOnlyOKButton(context: Context, title: String, message: Stri
     }
 }
 
-
 class TextDialog(val context: Context) {
     var title = ""
     var message = ""
@@ -48,7 +34,7 @@ class TextDialog(val context: Context) {
         if (dialog.isShowing) {
             return
         }
-        //
+        //initial content
         dialogBinding.apply {
             val backgroundCorner = 25
             root.setBackgroundColor(context.getColor(R.color.white))
@@ -63,7 +49,7 @@ class TextDialog(val context: Context) {
                 tvMessage.visibility = View.GONE
             }
         }
-        //
+        //to show
         dialog.apply {
 
             setContentView(dialogBinding.root)

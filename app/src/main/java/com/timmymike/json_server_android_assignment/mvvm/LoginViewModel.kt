@@ -111,7 +111,6 @@ class LoginViewModel(private val context: Context, private val userArray: ArrayL
         val cell = ApiConnect.getService(context).uploadData(json)
         val response = cell.execute()
         return if (response.isSuccessful) {
-//            logi(TAG, response.body() ?: "no data")
             response.body()
         } else {
             loge(TAG, "API ERROR! this is error message：${response.errorBody()?.string()}")

@@ -8,6 +8,7 @@ import androidx.lifecycle.ViewModelProvider
 import com.timmymike.json_server_android_assignment.mvvm.SplashViewModel
 import com.timmymike.json_server_android_assignment.mvvm.ViewModelSplashFactory
 import com.timmymike.json_server_android_assignment.databinding.ActivitySplashSettingBinding
+import com.timmymike.json_server_android_assignment.tools.setTextSize
 
 class SplashSettingActivity : AppCompatActivity() {
     private val context: Context = this
@@ -21,8 +22,14 @@ class SplashSettingActivity : AppCompatActivity() {
 //        setContentView(R.layout.activity_splash_setting)
         splashBinding = DataBindingUtil.setContentView(activity, R.layout.activity_splash_setting)
 
+        initView()
+
         initMvvm()
 
+    }
+
+    private fun initView() {
+        splashBinding.edtUrl.setTextSize(20)
     }
 
     private fun initMvvm() {
