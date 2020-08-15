@@ -1,44 +1,42 @@
 package com.timmymike.json_server_android_assignment.mvvm
 
 import android.content.Context
+import android.content.Intent
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
+import com.timmymike.json_server_android_assignment.MemberDetailActivity
 import com.timmymike.json_server_android_assignment.R
-import com.timmymike.json_server_android_assignment.api.ApiConnect
 import com.timmymike.json_server_android_assignment.api.model.UserModelData
-import com.timmymike.json_server_android_assignment.tools.BaseSharePreference
 import com.timmymike.json_server_android_assignment.tools.dialog.ProgressDialog
+import com.timmymike.json_server_android_assignment.tools.dialog.TextDialog
 import com.timmymike.json_server_android_assignment.tools.dialog.showMessageDialogOnlyOKButton
 import com.timmymike.json_server_android_assignment.tools.getWaitInterval
 import com.timmymike.json_server_android_assignment.tools.loge
-import com.timmymike.json_server_android_assignment.tools.logi
-import kotlinx.coroutines.*
-import okhttp3.ResponseBody
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.GlobalScope
+import kotlinx.coroutines.delay
+import kotlinx.coroutines.launch
 import java.util.*
 
 /**======== View Model ========*/
 
-class LoginViewModel(private val context: Context,private val userArray: ArrayList<UserModelData.UserModelItem>) : ViewModel() {
+class LoginViewModel(private val context: Context, private val userArray: ArrayList<UserModelData.UserModelItem>) : ViewModel() {
     val TAG = javaClass.simpleName
-
 
     var account = ""
     var password = ""
-
-    var urlString: String
-        get() = BaseSharePreference.getURLLink(context)
-        set(value) = BaseSharePreference.setURLLink(context, value)
 
     private val loginDuration by lazy {
         context.resources.getInteger(R.integer.login_duration).toLong()
     }
 
-
+    private var textDialog: TextDialog? = null
     fun login() {
-        loge(TAG,"now userArray before login is ===>$userArray")
-//        liveLoadingInterrupt.postValue(false)
-        if(account == "" || password =="" ) {
-            showMessageDialogOnlyOKButton(context,"Notice","Account or Password counld not be empty!")
+        loge(TAG, "now userArray before login is ===>$userArray")
+        if (account == "" || password == "") {
+            textDialog = showMessageDialogOnlyOKButton(context, "Notice", "Account or Password counld not be empty!") {
+                textDialog = null
+            }
             return
         }
 
@@ -52,33 +50,56 @@ class LoginViewModel(private val context: Context,private val userArray: ArrayLi
             }
             val startTime = Date().time
 
-            try {
-//                val error = getUserData()
-//                if (error != null) {
-//                    loge(TAG, "API ERROR! this is message：${error.string()}")
-//                }
-            } catch (e: Exception) {
-                e.printStackTrace()
+            var isFail = false // if Account in userArray,But Password is incorrect, this boolean will be true
+            var isMember = false // if Account in userArray, and Password is correct, this boolean will be true
+            var userIndexInArray = -1
+            for (index in userArray.indices) {
+                if (userArray[index].account == account) {
+                    if (userArray[index].password == password) {
+                        isMember = true
+                        userIndexInArray = index
+                    } else
+                        isFail = true
+                    break
+                }
             }
-
             delay(startTime.getWaitInterval(loginDuration))
 
             GlobalScope.launch(Dispatchers.Main) {
                 if (pgDialg.isShowing()) {
                     pgDialg.dismiss()
                 }
+                if (isFail) {//showTextDialog
+                    textDialog = showMessageDialogOnlyOKButton(context, "Notice", "Password is incorrect!") {
+                        textDialog = null
+                    }
+                    return@launch
+                }
             }
+            val userData = if (userIndexInArray != -1) userArray[userIndexInArray] else UserModelData.UserModelItem()
+            val intent = Intent(context,MemberDetailActivity::class.java)
+            if (isMember) { // To Member Activity
+
+
+            } else { // post to Api And To Member Activity
+
+
+            }
+
+
+
+
         }
     }
 
 
 }
 
-class ViewModelLoginFactory(private val context: Context,private val userArray: ArrayList<UserModelData.UserModelItem>) :
+class ViewModelLoginFactory(private val context: Context, private val userArray: ArrayList<UserModelData.UserModelItem>) :
     ViewModelProvider.Factory {
     override fun <T : ViewModel> create(modelClass: Class<T>): T {
         if (modelClass.isAssignableFrom(LoginViewModel::class.java)) {
-            return LoginViewModel(context,userArray) as T
+            return LoginViewModel(context, userArray) as T
         }
         throw IllegalArgumentException("Unknown ViewModel class")
     }
