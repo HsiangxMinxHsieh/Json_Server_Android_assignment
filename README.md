@@ -1,10 +1,12 @@
-# GitHubAPI_CodeTask
-This App is build for 17 Interview test,
+# Android assignment 
+This App is build for Rate Game Company  Interview test,
 
-According Document https://docs.google.com/document/d/1mPfBIpQcNOIJkD932LZP1NspiFBtao0W5DuZiTV_bqg/edit
+According Document https://github.com/HsiangxMinxHsieh/Json_Server_Android_assignment/blob/master/readMeData/README.md
+
+Here is this App's flow chart:
+<image width = "100%" src = "https://github.com/HsiangxMinxHsieh/Json_Server_Android_assignment/blob/master/readMeData/Android%20assignment%20-%20Flow%20Chart.jpg"/>
 
 Funtion is bellow：
-
 
 <h3>1.Search User by key string：</h3>
 When you enter this App, you will see like this:
