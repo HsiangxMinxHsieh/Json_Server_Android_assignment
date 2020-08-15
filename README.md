@@ -3,7 +3,8 @@ This App is build for Rate Game Company  Interview test,
 
 According Document https://github.com/HsiangxMinxHsieh/Json_Server_Android_assignment/blob/master/readMeData/README.md
 
-Here is this App's flow chart by my drawing:
+This is the flow chart of the application I drew:
+
 <image width = "100%" src = "https://github.com/HsiangxMinxHsieh/Json_Server_Android_assignment/blob/master/readMeData/Android%20assignment%20-%20Flow%20Chart.jpg"/>
 
 Funtion is bellow：
