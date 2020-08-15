@@ -9,11 +9,12 @@ This is the flow chart of the application I drew:
 
 Funtion is bellow：
 
-<h3>1.Get data from api and login：</h3>
+<h3>1.Get data from api：</h3>
 Beacause the assignment requirements,the data does not store in local database or BaseSharePreference,so I need get data in splash page:<BR>
 <image width = "20%" src = "https://github.com/HsiangxMinxHsieh/Json_Server_Android_assignment/blob/master/readMeData/pic/pic_2020-08-15_19-11-39.png"/><BR>
 Of course, if you feel that this URL is not what you want,, you can modify in click "X" in progress dialog.<BR>
 <image width = "20%" src = "https://github.com/HsiangxMinxHsieh/Json_Server_Android_assignment/blob/master/readMeData/pic/pic_2020-08-15_19-12-47.png"/><BR>
+<h3>2.Login and judge this account is exist or not：</h3>
 after 4 second (assignment requirements), you will see the login page:<BR>
 <image width = "20%" src = "https://github.com/HsiangxMinxHsieh/Json_Server_Android_assignment/blob/master/readMeData/pic/pic%202020-08-15_19-13-42.png"/><BR>
 Then key in your account and password to login/signup. after 2.5 second(assignment requirements), you will see the result.<BR>
