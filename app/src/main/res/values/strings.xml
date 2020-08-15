@@ -1,4 +1,7 @@
 <resources>
     <string name="app_name">Json_Server_Android_assignment</string>
     <string name="dialog_progress_default_title">Please Wait…</string>
+    <string name="splash_setting_save">Save</string>
+    <string name="splash_setting_connect_url">Please enter your connect URL</string>
+
 </resources>

@@ -8,14 +8,10 @@ import retrofit2.converter.gson.GsonConverterFactory
 import java.util.concurrent.TimeUnit
 
 object ApiConnect {
-    const val def_url = "http://10.0.3.2:3000/"
-    private var apiService : ApiService? = null
+    const val def_url = "http://10.0.2.2:3000/users/"
 
     fun getService(context: Context): ApiService {
-        if (apiService == null) {
-            apiService = init(context)
-        }
-        return apiService ?: init(context)
+        return init(context)
     }
 
     private fun init(context: Context): ApiService {
