@@ -5,4 +5,12 @@
     <color name="colorAccent">#03DAC5</color>
 
     <color name="white">#FFFFFF</color>
+    <color name="dialog_bg">#FFFFFF</color>
+    <color name="dialog_txt_title">#000000</color>
+    <color name="dialog_txt_message">#999999</color>
+    <color name="dialog_btn_right">#00AD97</color>
+    <color name="dialog_btn_right2">#03C8E0</color>
+    <color name="dialog_btn_lift">#222222</color>
+    <color name="dialog_btn_lift2">#D81BE0</color>
+    <color name="dialog_divider">#999999</color>
 </resources>

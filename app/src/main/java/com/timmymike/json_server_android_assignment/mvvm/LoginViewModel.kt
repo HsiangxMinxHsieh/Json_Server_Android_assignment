@@ -10,10 +10,7 @@ import com.timmymike.json_server_android_assignment.tools.dialog.ProgressDialog
 import com.timmymike.json_server_android_assignment.tools.getWaitInterval
 import com.timmymike.json_server_android_assignment.tools.loge
 import com.timmymike.json_server_android_assignment.tools.logi
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.GlobalScope
-import kotlinx.coroutines.delay
-import kotlinx.coroutines.launch
+import kotlinx.coroutines.*
 import okhttp3.ResponseBody
 import java.util.*
 
@@ -21,6 +18,10 @@ import java.util.*
 
 class LoginViewModel(private val context: Context) : ViewModel() {
     val TAG = javaClass.simpleName
+
+
+    var account = ""
+    var password = ""
 
     var urlString: String
         get() = BaseSharePreference.getURLLink(context)

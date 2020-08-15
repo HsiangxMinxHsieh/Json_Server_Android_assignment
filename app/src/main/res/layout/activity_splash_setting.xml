@@ -12,8 +12,6 @@
             name="viewModel"
             type="com.timmymike.json_server_android_assignment.mvvm.SplashViewModel" />
 
-
-
     </data>
 
     <androidx.constraintlayout.widget.ConstraintLayout
@@ -37,7 +35,7 @@
             android:layout_marginStart="16dp"
             android:layout_marginEnd="16dp"
             android:layout_marginBottom="10dp"
-            android:onClick="@{() -> viewModel.getData()}"
+            android:onClick="@{() -> viewModel.getDataFromAPI()}"
             android:text="@string/splash_setting_save"
             android:visibility="@{viewModel.liveLoadingInterrupt ? View.VISIBLE : View.GONE}"
             app:layout_constraintBottom_toBottomOf="parent"

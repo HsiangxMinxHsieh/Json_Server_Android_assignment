@@ -1,10 +1,13 @@
 <resources>
-    <string name="app_name">Json_Server_Android_assignment</string>
+    <string name="app_name">Rate Android assignment</string>
     <string name="dialog_progress_default_title">Please Wait…</string>
     <string name="splash_setting_save">Save</string>
     <string name="splash_setting_connect_url">Please enter your connect URL</string>
     <string name="login_account_hint">Type your account here</string>
     <string name="login_password_hint">Type your password here</string>
     <string name="login_btn_text">Login/Sign Up</string>
+
+    <string name="ok">OK</string>
+    <string name="cancel">Cancel</string>
 
 </resources>

@@ -3,7 +3,6 @@ package com.timmymike.json_server_android_assignment.mvvm
 import android.app.Activity
 import android.content.Context
 import android.content.Intent
-import android.os.Parcelable
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
@@ -15,12 +14,7 @@ import com.timmymike.json_server_android_assignment.tools.BaseSharePreference
 import com.timmymike.json_server_android_assignment.tools.dialog.ProgressDialog
 import com.timmymike.json_server_android_assignment.tools.getWaitInterval
 import com.timmymike.json_server_android_assignment.tools.loge
-import com.timmymike.json_server_android_assignment.tools.logi
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.GlobalScope
-import kotlinx.coroutines.delay
-import kotlinx.coroutines.launch
-import java.io.Serializable
+import kotlinx.coroutines.*
 import java.util.*
 
 /**======== View Model ========*/
@@ -34,7 +28,7 @@ class SplashViewModel(private val context: Context) : ViewModel() {
 
     init {
 
-        getData()
+        getDataFromAPI()
     }
 
     private val waitAPIDuration by lazy {
@@ -42,7 +36,7 @@ class SplashViewModel(private val context: Context) : ViewModel() {
     }
 
 
-    fun getData() {
+    fun getDataFromAPI() {
         liveLoadingInterrupt.postValue(false)
         val pgDialg: ProgressDialog = ProgressDialog(context).apply {
             needClose = true
@@ -71,16 +65,16 @@ class SplashViewModel(private val context: Context) : ViewModel() {
             }
 
             delay(startTime.getWaitInterval(waitAPIDuration))
-            //To Login
-            loge(TAG,"放進去前，data是===>$data")
-            val intent = Intent(context, LoginActivity::class.java)
-            intent.putParcelableArrayListExtra(LoginActivity.KEY_USER_DATA, data )
-            (context as? Activity)?.startActivity(intent)
 
             GlobalScope.launch(Dispatchers.Main) {
                 if (pgDialg.isShowing() && (context as? Activity)?.isFinishing == false) {
                     pgDialg.dismiss()
                 }
+                //To Login
+                val intent = Intent(context, LoginActivity::class.java)
+                intent.putParcelableArrayListExtra(LoginActivity.KEY_USER_DATA, data)
+                (context as? Activity)?.startActivity(intent)
+                (context as? Activity)?.finish()
             }
         }
     }
