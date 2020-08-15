@@ -9,6 +9,7 @@ import com.timmymike.json_server_android_assignment.api.model.UserModelData
 import com.timmymike.json_server_android_assignment.databinding.ActivityLoginBinding
 import com.timmymike.json_server_android_assignment.mvvm.LoginViewModel
 import com.timmymike.json_server_android_assignment.mvvm.ViewModelLoginFactory
+import com.timmymike.json_server_android_assignment.tools.setTextSize
 
 class LoginActivity : AppCompatActivity() {
 
@@ -27,8 +28,12 @@ class LoginActivity : AppCompatActivity() {
 
         initData()
 
+        initView()
+
         initMvvm()
     }
+
+
 
     private fun initData() {
         try {
@@ -37,6 +42,11 @@ class LoginActivity : AppCompatActivity() {
         } catch (e: Exception) {
             e.printStackTrace()
         }
+    }
+
+    private fun initView() {
+        loginBinding.edtAccount.setTextSize(20)
+        loginBinding.edtPassword.setTextSize(20)
     }
 
     private fun initMvvm() {
