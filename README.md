@@ -26,5 +26,12 @@ Of course, if your account is correct, but password is incorrect, you can not lo
 <image width = "20%" src = "https://github.com/HsiangxMinxHsieh/Json_Server_Android_assignment/blob/master/readMeData/pic/pic%202020-08-15_19-28-09.png"/><BR>
 By the way, the assignment requirements:"The input user account & user password cannot be empty. "<BR>
 <image width = "20%" src = "https://github.com/HsiangxMinxHsieh/Json_Server_Android_assignment/blob/master/readMeData/pic/pic%202020-08-15_19-28-56.png"/><BR>
+  
+At last you can find my apk in here:<BR>
+https://github.com/HsiangxMinxHsieh/Json_Server_Android_assignment/blob/master/readMeData/Android_assignment_debug_1.0.0_1.apk<BR>
+  
+and db.json(test data) in here:<BR>
+https://github.com/HsiangxMinxHsieh/Json_Server_Android_assignment/blob/master/readMeData/db.json<BR>
+
 Thanks for your watch.
 
