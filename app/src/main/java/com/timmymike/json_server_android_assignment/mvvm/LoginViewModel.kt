@@ -5,6 +5,7 @@ import android.content.Context
 import android.content.Intent
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
+import androidx.lifecycle.viewModelScope
 import com.google.gson.JsonObject
 import com.timmymike.json_server_android_assignment.MemberDetailActivity
 import com.timmymike.json_server_android_assignment.R
@@ -42,9 +43,9 @@ class LoginViewModel(private val context: Context, private val userArray: ArrayL
 
         val pgDialg = ProgressDialog(context)
 
-        job = GlobalScope.launch(Dispatchers.IO) {
+        job = viewModelScope.launch(Dispatchers.IO) {
 
-            GlobalScope.launch(Dispatchers.Main) {
+            viewModelScope.launch(Dispatchers.Main) {
                 if (!pgDialg.isShowing())
                     pgDialg.show()
             }
@@ -65,7 +66,7 @@ class LoginViewModel(private val context: Context, private val userArray: ArrayL
             }
             delay(startTime.getWaitInterval(loginDuration))
 
-            GlobalScope.launch(Dispatchers.Main) {
+            viewModelScope.launch(Dispatchers.Main) {
                 if (pgDialg.isShowing()) {
                     pgDialg.dismiss()
                 }

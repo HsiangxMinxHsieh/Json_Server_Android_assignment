@@ -39,7 +39,6 @@
                 android:layout_height="wrap_content"
                 android:hint="@string/login_password_hint"
                 android:text="@={viewModel.password}" />
-            
         </LinearLayout>
 
         <Button

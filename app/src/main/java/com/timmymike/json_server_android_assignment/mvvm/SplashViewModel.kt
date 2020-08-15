@@ -6,6 +6,7 @@ import android.content.Intent
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
+import androidx.lifecycle.viewModelScope
 import com.timmymike.json_server_android_assignment.LoginActivity
 import com.timmymike.json_server_android_assignment.R
 import com.timmymike.json_server_android_assignment.api.ApiConnect
@@ -49,9 +50,9 @@ class SplashViewModel(private val context: Context) : ViewModel() {
             }
         }
 
-        job = GlobalScope.launch(Dispatchers.IO) {
+        job = viewModelScope.launch(Dispatchers.IO) {
 
-            GlobalScope.launch(Dispatchers.Main) {
+            viewModelScope.launch(Dispatchers.Main) {
                 if (!pgDialg.isShowing())
                     pgDialg.show()
             }
@@ -69,7 +70,7 @@ class SplashViewModel(private val context: Context) : ViewModel() {
 
             delay(startTime.getWaitInterval(waitAPIDuration))
 
-            GlobalScope.launch(Dispatchers.Main) {
+            viewModelScope.launch(Dispatchers.Main) {
                 if (pgDialg.isShowing() && (context as? Activity)?.isFinishing == false) {
                     pgDialg.dismiss()
                 }
@@ -98,10 +99,8 @@ class SplashViewModel(private val context: Context) : ViewModel() {
     }
 
     override fun onCleared() {
+        job?.cancel()
         super.onCleared()
-        GlobalScope.launch {
-            job?.cancelAndJoin()
-        }
         loge(TAG, "ViewModelCleared.")
     }
 }
