@@ -82,7 +82,7 @@
     },
     {
       "account": "job",
-      "password": "1234\n",
+      "password": "1234",
       "id": 17
     },
     {
@@ -100,15 +100,5 @@
       "password": "222",
       "id": 20
     }
-  ],
-  "comments": [
-    {
-      "id": 1,
-      "body": "some comment",
-      "postId": 1
-    }
-  ],
-  "profile": {
-    "name": "typicode"
-  }
+  ]
 }
