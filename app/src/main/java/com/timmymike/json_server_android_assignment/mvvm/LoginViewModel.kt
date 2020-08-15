@@ -5,18 +5,17 @@ import android.content.Context
 import android.content.Intent
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
+import com.google.gson.JsonObject
 import com.timmymike.json_server_android_assignment.MemberDetailActivity
 import com.timmymike.json_server_android_assignment.R
+import com.timmymike.json_server_android_assignment.api.ApiConnect
 import com.timmymike.json_server_android_assignment.api.model.UserModelData
 import com.timmymike.json_server_android_assignment.tools.dialog.ProgressDialog
 import com.timmymike.json_server_android_assignment.tools.dialog.TextDialog
 import com.timmymike.json_server_android_assignment.tools.dialog.showMessageDialogOnlyOKButton
 import com.timmymike.json_server_android_assignment.tools.getWaitInterval
 import com.timmymike.json_server_android_assignment.tools.loge
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.GlobalScope
-import kotlinx.coroutines.delay
-import kotlinx.coroutines.launch
+import kotlinx.coroutines.*
 import java.util.*
 
 /**======== View Model ========*/
@@ -30,7 +29,7 @@ class LoginViewModel(private val context: Context, private val userArray: ArrayL
     private val loginDuration by lazy {
         context.resources.getInteger(R.integer.login_duration).toLong()
     }
-
+    private var job: Job? = null
     private var textDialog: TextDialog? = null
     fun login() {
         loge(TAG, "now userArray before login is ===>$userArray")
@@ -43,7 +42,7 @@ class LoginViewModel(private val context: Context, private val userArray: ArrayL
 
         val pgDialg = ProgressDialog(context)
 
-        GlobalScope.launch {
+        job = GlobalScope.launch(Dispatchers.IO) {
 
             GlobalScope.launch(Dispatchers.Main) {
                 if (!pgDialg.isShowing())
@@ -77,21 +76,52 @@ class LoginViewModel(private val context: Context, private val userArray: ArrayL
                     return@launch
                 }
             }
-            val userData = if (userIndexInArray != -1) userArray[userIndexInArray] else UserModelData.UserModelItem()
-            val intent = Intent(context,MemberDetailActivity::class.java)
-            if (isMember) { // To Member Activity
-                intent.putExtra(MemberDetailActivity.KEY_LOGIN_METHOD, MemberDetailActivity.Companion.LoginMethod.Login)
+            if (!isFail) {
+                var userData = if (userIndexInArray != -1) userArray[userIndexInArray] else UserModelData.UserModelItem()
+                val intent = Intent(context, MemberDetailActivity::class.java)
+                if (isMember) { // To Member Activity
+                    intent.putExtra(MemberDetailActivity.KEY_LOGIN_METHOD, MemberDetailActivity.Companion.LoginMethod.Login)
 
-            } else { // post to Api And To Member Activity
-                intent.putExtra(MemberDetailActivity.KEY_LOGIN_METHOD, MemberDetailActivity.Companion.LoginMethod.SignUp)
-
+                } else { // post to Api And To Member Activity
+                    intent.putExtra(MemberDetailActivity.KEY_LOGIN_METHOD, MemberDetailActivity.Companion.LoginMethod.SignUp)
+                    userData = upLoadUserData(
+                        UserModelData.UserModelItem().apply {
+                        account = this@LoginViewModel.account
+                        password = this@LoginViewModel.password
+                    }) ?: UserModelData.UserModelItem()
+                    userArray.add(userData)
+                }
+                intent.putExtra(MemberDetailActivity.KEY_USER_DATA, userData)
+                (context as? Activity)?.startActivity(intent)
             }
-            intent.putExtra(MemberDetailActivity.KEY_USER_DATA,userData)
-            (context as? Activity)?.startActivity(intent)
-
 
 
         }
+    }
+
+    /**Send Api to new this User Data*/
+    @Throws(Exception::class)
+    private fun upLoadUserData(user: UserModelData.UserModelItem): UserModelData.UserModelItem? {
+        val json = JsonObject().apply {
+            addProperty("account", user.account)
+            addProperty("password", user.password)
+        }
+
+        val cell = ApiConnect.getService(context).uploadData(json)
+        val response = cell.execute()
+        return if (response.isSuccessful) {
+//            logi(TAG, response.body() ?: "no data")
+            response.body()
+        } else {
+            loge(TAG, "API ERROR! this is error message：${response.errorBody()?.string()}")
+            null
+        }
+    }
+
+    override fun onCleared() {
+        job?.cancel()
+        super.onCleared()
+        loge(TAG,"ViewModelCleared.")
     }
 
 

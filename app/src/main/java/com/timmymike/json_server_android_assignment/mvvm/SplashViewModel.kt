@@ -36,17 +36,20 @@ class SplashViewModel(private val context: Context) : ViewModel() {
     }
 
 
+    private var job: Job? = null
     fun getDataFromAPI() {
+
         liveLoadingInterrupt.postValue(false)
         val pgDialg: ProgressDialog = ProgressDialog(context).apply {
             needClose = true
             binding.ivClose.setOnClickListener {
                 dialog.dismiss()
                 liveLoadingInterrupt.postValue(true)
+                job?.cancel()
             }
         }
 
-        GlobalScope.launch {
+        job = GlobalScope.launch(Dispatchers.IO) {
 
             GlobalScope.launch(Dispatchers.Main) {
                 if (!pgDialg.isShowing())
@@ -77,8 +80,8 @@ class SplashViewModel(private val context: Context) : ViewModel() {
                 (context as? Activity)?.finish()
             }
         }
-    }
 
+    }
 
     /**Get User Data*/
     @Throws(Exception::class)
@@ -92,6 +95,14 @@ class SplashViewModel(private val context: Context) : ViewModel() {
             loge(TAG, "API ERROR! this is error message：${response.errorBody()?.string()}")
             null
         }
+    }
+
+    override fun onCleared() {
+        super.onCleared()
+        GlobalScope.launch {
+            job?.cancelAndJoin()
+        }
+        loge(TAG, "ViewModelCleared.")
     }
 }
 
