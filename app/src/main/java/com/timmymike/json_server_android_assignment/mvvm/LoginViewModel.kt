@@ -5,8 +5,10 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
 import com.timmymike.json_server_android_assignment.R
 import com.timmymike.json_server_android_assignment.api.ApiConnect
+import com.timmymike.json_server_android_assignment.api.model.UserModelData
 import com.timmymike.json_server_android_assignment.tools.BaseSharePreference
 import com.timmymike.json_server_android_assignment.tools.dialog.ProgressDialog
+import com.timmymike.json_server_android_assignment.tools.dialog.showMessageDialogOnlyOKButton
 import com.timmymike.json_server_android_assignment.tools.getWaitInterval
 import com.timmymike.json_server_android_assignment.tools.loge
 import com.timmymike.json_server_android_assignment.tools.logi
@@ -16,7 +18,7 @@ import java.util.*
 
 /**======== View Model ========*/
 
-class LoginViewModel(private val context: Context) : ViewModel() {
+class LoginViewModel(private val context: Context,private val userArray: ArrayList<UserModelData.UserModelItem>) : ViewModel() {
     val TAG = javaClass.simpleName
 
 
@@ -33,7 +35,13 @@ class LoginViewModel(private val context: Context) : ViewModel() {
 
 
     fun login() {
+        loge(TAG,"now userArray before login is ===>$userArray")
 //        liveLoadingInterrupt.postValue(false)
+        if(account == "" || password =="" ) {
+            showMessageDialogOnlyOKButton(context,"Notice","Account or Password counld not be empty!")
+            return
+        }
+
         val pgDialg = ProgressDialog(context)
 
         GlobalScope.launch {
@@ -66,11 +74,11 @@ class LoginViewModel(private val context: Context) : ViewModel() {
 
 }
 
-class ViewModelLoginFactory(private val context: Context) :
+class ViewModelLoginFactory(private val context: Context,private val userArray: ArrayList<UserModelData.UserModelItem>) :
     ViewModelProvider.Factory {
     override fun <T : ViewModel> create(modelClass: Class<T>): T {
         if (modelClass.isAssignableFrom(LoginViewModel::class.java)) {
-            return LoginViewModel(context) as T
+            return LoginViewModel(context,userArray) as T
         }
         throw IllegalArgumentException("Unknown ViewModel class")
     }

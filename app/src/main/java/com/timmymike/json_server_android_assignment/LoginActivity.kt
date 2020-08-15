@@ -8,19 +8,21 @@ import androidx.lifecycle.ViewModelProvider
 import com.timmymike.json_server_android_assignment.api.model.UserModelData
 import com.timmymike.json_server_android_assignment.databinding.ActivityLoginBinding
 import com.timmymike.json_server_android_assignment.mvvm.LoginViewModel
-import com.timmymike.json_server_android_assignment.mvvm.SplashViewModel
 import com.timmymike.json_server_android_assignment.mvvm.ViewModelLoginFactory
-import com.timmymike.json_server_android_assignment.mvvm.ViewModelSplashFactory
 import com.timmymike.json_server_android_assignment.tools.loge
+import java.lang.Exception
 
 class LoginActivity : AppCompatActivity() {
     val TAG = javaClass.simpleName
-    companion object{
-        const val KEY_USER_DATA= "KEY_USER_DATA"
+
+    companion object {
+        const val KEY_USER_DATA = "KEY_USER_DATA"
 
     }
+
     private val context: Context = this
     private val activity = this
+    private var userDataArray  = ArrayList<UserModelData.UserModelItem>()
     private lateinit var viewModel: LoginViewModel
     private lateinit var loginBinding: ActivityLoginBinding
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -32,27 +34,18 @@ class LoginActivity : AppCompatActivity() {
         initMvvm()
 //        setContentView(R.layout.activity_login)
     }
+
     private fun initData() {
-        loge(TAG,"${intent.getParcelableArrayListExtra<UserModelData.UserModelItem>(KEY_USER_DATA)}")
-        val bundle = intent.extras
+        try{
+            userDataArray = intent.getParcelableArrayListExtra<UserModelData.UserModelItem>(KEY_USER_DATA) as ArrayList<UserModelData.UserModelItem>
 
-        var s = ""
-        if (bundle != null){
-            for (key in bundle.keySet()) {
-                try {
-                    val value = bundle.get(key)
-                    s += "$key:$value\n"
-                    loge(TAG, "$key $value")
-                } catch (e: ClassCastException) {
-                    e.printStackTrace()
-                }
-            }
-            loge(TAG, "" + s)
+        }catch (e:Exception){
+            e.printStackTrace()
         }
-
     }
+
     private fun initMvvm() {
-        viewModel = ViewModelProvider(activity, ViewModelLoginFactory(context)).get(LoginViewModel::class.java)
+        viewModel = ViewModelProvider(activity, ViewModelLoginFactory(context,userDataArray)).get(LoginViewModel::class.java)
 
         loginBinding.viewModel = viewModel
         loginBinding.lifecycleOwner = activity
