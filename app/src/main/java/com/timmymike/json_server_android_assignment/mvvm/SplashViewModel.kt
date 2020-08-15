@@ -13,9 +13,14 @@ import com.timmymike.json_server_android_assignment.api.ApiConnect
 import com.timmymike.json_server_android_assignment.api.model.UserModelData
 import com.timmymike.json_server_android_assignment.tools.BaseSharePreference
 import com.timmymike.json_server_android_assignment.tools.dialog.ProgressDialog
+import com.timmymike.json_server_android_assignment.tools.dialog.showMessageDialogOnlyOKButton
 import com.timmymike.json_server_android_assignment.tools.getWaitInterval
 import com.timmymike.json_server_android_assignment.tools.loge
-import kotlinx.coroutines.*
+import com.timmymike.json_server_android_assignment.tools.logi
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.Job
+import kotlinx.coroutines.delay
+import kotlinx.coroutines.launch
 import java.util.*
 
 /**======== View Model ========*/
@@ -58,6 +63,7 @@ class SplashViewModel(private val context: Context) : ViewModel() {
             }
             val startTime = Date().time
             var data: UserModelData? = null
+            var getDataFail = false
             try {
                 data = getUserData()
                 if (data == null) {
@@ -66,6 +72,8 @@ class SplashViewModel(private val context: Context) : ViewModel() {
                 }
             } catch (e: Exception) {
                 e.printStackTrace()
+                getDataFail = true
+
             }
 
             delay(startTime.getWaitInterval(waitAPIDuration))
@@ -74,11 +82,17 @@ class SplashViewModel(private val context: Context) : ViewModel() {
                 if (pgDialg.isShowing() && (context as? Activity)?.isFinishing == false) {
                     pgDialg.dismiss()
                 }
-                //To Login
-                val intent = Intent(context, LoginActivity::class.java)
-                intent.putParcelableArrayListExtra(LoginActivity.KEY_USER_DATA, data)
-                (context as? Activity)?.startActivity(intent)
-                (context as? Activity)?.finish()
+                if (getDataFail) {
+                    showMessageDialogOnlyOKButton(context, context.getString(R.string.error_dialog_title), context.getString(R.string.splash_no_data_get_error_message))
+                    liveLoadingInterrupt.postValue(true)
+                    return@launch
+                } else {
+                    //To Login
+                    val intent = Intent(context, LoginActivity::class.java)
+                    intent.putParcelableArrayListExtra(LoginActivity.KEY_USER_DATA, data)
+                    (context as? Activity)?.startActivity(intent)
+                    (context as? Activity)?.finish()
+                }
             }
         }
 
@@ -89,6 +103,7 @@ class SplashViewModel(private val context: Context) : ViewModel() {
     private fun getUserData(): UserModelData? {
         val cell = ApiConnect.getService(context).getData()
         val response = cell.execute()
+        logi(TAG,"getUserData response is ===>$response")
         return if (response.isSuccessful) {
 //            logi(TAG, response.body() ?: "no data")
             response.body()

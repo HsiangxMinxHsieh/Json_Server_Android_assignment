@@ -3,13 +3,15 @@
     <string name="dialog_progress_default_title">Please Wait…</string>
     <string name="splash_setting_save">Save</string>
     <string name="splash_setting_connect_url">Please enter your connect URL</string>
+    <string name="splash_no_data_get_error_message">This app can\'t get data from api. please check your setting and try again.</string>
+
     <string name="login_account_hint">Type your account here</string>
     <string name="login_password_hint">Type your password here</string>
     <string name="login_btn_text">Login/Sign Up</string>
 
     <string name="ok">OK</string>
     <string name="cancel">Cancel</string>
-    <string name="login_account_right_password_error">\"Login fail! Your account is exist, but the password is incorrect,please try again.\"</string>
+    <string name="login_account_right_password_error">Login fail! Your account is exist, but the password is incorrect,please try again.</string>
     <string name="login_account_or_password_empty">Account or Password counld not be empty!</string>
     <string name="error_dialog_title">Notice</string>
     <string name="member_information_title">Here is your information：</string>
@@ -19,5 +21,6 @@
     <string name="member_id">ID:%1$s</string>
     <string name="member_account">Account:%1$s</string>
     <string name="member_password">Password:%1$s</string>
+
 
 </resources>

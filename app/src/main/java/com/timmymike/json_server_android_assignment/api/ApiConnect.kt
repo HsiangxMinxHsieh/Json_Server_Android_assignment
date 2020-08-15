@@ -16,8 +16,8 @@ object ApiConnect {
 
     private fun init(context: Context): ApiService {
         val okHttpClient = OkHttpClient.Builder()
-            .readTimeout(100, TimeUnit.SECONDS)
-            .connectTimeout(100, TimeUnit.SECONDS)
+            .readTimeout(10, TimeUnit.SECONDS)
+            .connectTimeout(10, TimeUnit.SECONDS)
             .build()
 
         val retrofit = Retrofit.Builder()
