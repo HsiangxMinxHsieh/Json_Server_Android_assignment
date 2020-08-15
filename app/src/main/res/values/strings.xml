@@ -1,3 +1,4 @@
 <resources>
     <string name="app_name">Json_Server_Android_assignment</string>
+    <string name="dialog_progress_default_title">Please Wait…</string>
 </resources>
