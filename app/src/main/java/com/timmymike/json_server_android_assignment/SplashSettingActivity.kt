@@ -6,11 +6,10 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.databinding.DataBindingUtil
 import androidx.lifecycle.ViewModelProvider
 import com.timmymike.json_server_android_assignment.mvvm.SplashViewModel
-import com.timmymike.json_server_android_assignment.mvvm.ViewModelFactory
+import com.timmymike.json_server_android_assignment.mvvm.ViewModelSplashFactory
 import com.timmymike.json_server_android_assignment.databinding.ActivitySplashSettingBinding
 
 class SplashSettingActivity : AppCompatActivity() {
-    private val TAG = javaClass.simpleName
     private val context: Context = this
     private val activity = this
     private lateinit var splashBinding: ActivitySplashSettingBinding
@@ -27,7 +26,7 @@ class SplashSettingActivity : AppCompatActivity() {
     }
 
     private fun initMvvm() {
-        viewModel = ViewModelProvider(activity, ViewModelFactory(context)).get(SplashViewModel::class.java)
+        viewModel = ViewModelProvider(activity, ViewModelSplashFactory(context)).get(SplashViewModel::class.java)
 
         splashBinding.viewModel = viewModel
         splashBinding.lifecycleOwner = activity

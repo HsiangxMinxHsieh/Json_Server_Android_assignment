@@ -7,6 +7,7 @@ import android.widget.Button
 import android.widget.EditText
 import android.widget.TextView
 import com.timmymike.json_server_android_assignment.BuildConfig
+import java.util.*
 
 fun logi(tag: String, log: Any) {
     if (BuildConfig.DEBUG_MODE) Log.i(tag, log.toString())
@@ -15,7 +16,7 @@ fun logi(tag: String, log: Any) {
 fun loge(tag: String, log: Any) {
     if (BuildConfig.DEBUG_MODE) Log.e(tag, log.toString())
 }
-
+/**setTextSize*/
 fun View.setTextSize(sp: Int) {
     val displayMetrics = this.context.resources.displayMetrics
     val realSpSize =
@@ -28,3 +29,5 @@ fun View.setTextSize(sp: Int) {
 
     }
 }
+/**It's exactly waitAPIDuration milliseconds*/
+fun Long.getWaitInterval(duration: Long) = duration - (Date().time - this)
