@@ -12,7 +12,7 @@ Funtion is bellow：
 <h3>1.Get data from api and login：</h3>
 Beacause the assignment requirements,the data does not store in local database or BaseSharePreference,so I need get data in splash page:<BR>
 <image width = "20%" src = "https://github.com/HsiangxMinxHsieh/Json_Server_Android_assignment/blob/master/readMeData/pic/pic_2020-08-15_19-11-39.png"/><BR>
-Of course, if this web site is not you want, you can modify in click "X" in progress dialog.<BR>
+Of course, if you feel that this URL is not what you want,, you can modify in click "X" in progress dialog.<BR>
 <image width = "20%" src = "https://github.com/HsiangxMinxHsieh/Json_Server_Android_assignment/blob/master/readMeData/pic/pic_2020-08-15_19-12-47.png"/><BR>
 after 4 second (assignment requirements), you will see the login page:<BR>
 <image width = "20%" src = "https://github.com/HsiangxMinxHsieh/Json_Server_Android_assignment/blob/master/readMeData/pic/pic%202020-08-15_19-13-42.png"/><BR>
