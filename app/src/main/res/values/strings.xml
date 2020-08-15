@@ -9,5 +9,15 @@
 
     <string name="ok">OK</string>
     <string name="cancel">Cancel</string>
+    <string name="login_account_right_password_error">\"Login fail! Your account is exist, but the password is incorrect,please try again.\"</string>
+    <string name="login_account_or_password_empty">Account or Password counld not be empty!</string>
+    <string name="error_dialog_title">Notice</string>
+    <string name="member_information_title">Here is your information：</string>
+    <string name="member_btn_back_text">"Back to Login Page "</string>
+    <string name="member_login_method_login">You’re Login this App because Server have have your data before.</string>
+    <string name="member_login_method_sign_up">You’re Sign Up to this App because Server have don’t have your data before.</string>
+    <string name="member_id">ID:%1$s</string>
+    <string name="member_account">Account:%1$s</string>
+    <string name="member_password">Password:%1$s</string>
 
 </resources>

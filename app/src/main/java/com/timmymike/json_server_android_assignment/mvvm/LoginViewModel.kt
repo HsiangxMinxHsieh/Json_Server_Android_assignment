@@ -1,5 +1,6 @@
 package com.timmymike.json_server_android_assignment.mvvm
 
+import android.app.Activity
 import android.content.Context
 import android.content.Intent
 import androidx.lifecycle.ViewModel
@@ -34,7 +35,7 @@ class LoginViewModel(private val context: Context, private val userArray: ArrayL
     fun login() {
         loge(TAG, "now userArray before login is ===>$userArray")
         if (account == "" || password == "") {
-            textDialog = showMessageDialogOnlyOKButton(context, "Notice", "Account or Password counld not be empty!") {
+            textDialog = showMessageDialogOnlyOKButton(context, context.getString(R.string.error_dialog_title), context.getString(R.string.login_account_or_password_empty)) {
                 textDialog = null
             }
             return
@@ -70,7 +71,7 @@ class LoginViewModel(private val context: Context, private val userArray: ArrayL
                     pgDialg.dismiss()
                 }
                 if (isFail) {//showTextDialog
-                    textDialog = showMessageDialogOnlyOKButton(context, "Notice", "Password is incorrect!") {
+                    textDialog = showMessageDialogOnlyOKButton(context, context.getString(R.string.error_dialog_title), context.getString(R.string.login_account_right_password_error)) {
                         textDialog = null
                     }
                     return@launch
@@ -79,13 +80,14 @@ class LoginViewModel(private val context: Context, private val userArray: ArrayL
             val userData = if (userIndexInArray != -1) userArray[userIndexInArray] else UserModelData.UserModelItem()
             val intent = Intent(context,MemberDetailActivity::class.java)
             if (isMember) { // To Member Activity
-
+                intent.putExtra(MemberDetailActivity.KEY_LOGIN_METHOD, MemberDetailActivity.Companion.LoginMethod.Login)
 
             } else { // post to Api And To Member Activity
-
+                intent.putExtra(MemberDetailActivity.KEY_LOGIN_METHOD, MemberDetailActivity.Companion.LoginMethod.SignUp)
 
             }
-
+            intent.putExtra(MemberDetailActivity.KEY_USER_DATA,userData)
+            (context as? Activity)?.startActivity(intent)
 
 
 

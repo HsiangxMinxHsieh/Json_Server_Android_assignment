@@ -1,5 +1,6 @@
 package com.timmymike.json_server_android_assignment.tools
 
+import android.content.Context
 import android.util.Log
 import android.util.TypedValue
 import android.view.View
@@ -31,3 +32,5 @@ fun View.setTextSize(sp: Int) {
 }
 /**It's exactly waitAPIDuration milliseconds*/
 fun Long.getWaitInterval(duration: Long) = duration - (Date().time - this)
+
+fun String.formatByResourceID(context: Context, resourceID:Int) = String.format(context.getString(resourceID),this)
