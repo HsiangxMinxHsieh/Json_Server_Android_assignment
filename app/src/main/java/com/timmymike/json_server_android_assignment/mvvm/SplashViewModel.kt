@@ -66,9 +66,9 @@ class SplashViewModel(private val context: Context) : ViewModel() {
             var getDataFail = false
             try {
                 data = getUserData()
-                if (data == null) {
+                if (data == null || data.isEmpty()) {
+                    getDataFail  = true
                     loge(TAG, "getUserData do not get the data.")
-                    return@launch
                 }
             } catch (e: Exception) {
                 e.printStackTrace()
@@ -77,7 +77,6 @@ class SplashViewModel(private val context: Context) : ViewModel() {
             }
 
             delay(startTime.getWaitInterval(waitAPIDuration))
-
             viewModelScope.launch(Dispatchers.Main) {
                 if (pgDialg.isShowing() && (context as? Activity)?.isFinishing == false) {
                     pgDialg.dismiss()
