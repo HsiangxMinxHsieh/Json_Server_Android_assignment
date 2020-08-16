@@ -84,7 +84,6 @@ class SplashViewModel(private val context: Context) : ViewModel() {
                 if (getDataFail) {
                     showMessageDialogOnlyOKButton(context, context.getString(R.string.error_dialog_title), context.getString(R.string.splash_no_data_get_error_message))
                     liveLoadingInterrupt.postValue(true)
-                    return@launch
                 } else {
                     //To Login
                     val intent = Intent(context, LoginActivity::class.java)

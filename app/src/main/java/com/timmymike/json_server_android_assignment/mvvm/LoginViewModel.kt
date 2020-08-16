@@ -74,7 +74,6 @@ class LoginViewModel(private val context: Context, private val userArray: ArrayL
                     textDialog = showMessageDialogOnlyOKButton(context, context.getString(R.string.error_dialog_title), context.getString(R.string.login_account_right_password_error)) {
                         textDialog = null
                     }
-                    return@launch
                 }
             }
             if (!isFail) {
