@@ -3,15 +3,14 @@ package com.timmymike.json_server_android_assignment.mvvm
 import android.app.Activity
 import android.app.Application
 import android.content.Intent
+import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.MutableLiveData
-import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.timmymike.json_server_android_assignment.LoginActivity
 import com.timmymike.json_server_android_assignment.R
 import com.timmymike.json_server_android_assignment.api.ApiConnect
 import com.timmymike.json_server_android_assignment.api.model.UserModelData
 import com.timmymike.json_server_android_assignment.tools.BaseSharePreference
-import com.timmymike.json_server_android_assignment.tools.dialog.ProgressDialog
 import com.timmymike.json_server_android_assignment.tools.dialog.showMessageDialogOnlyOKButton
 import com.timmymike.json_server_android_assignment.tools.getWaitInterval
 import com.timmymike.json_server_android_assignment.tools.loge
@@ -24,12 +23,14 @@ import java.util.*
 
 /**======== View Model ========*/
 
-class SplashViewModel(private val application: Application) : ViewModel() {
+class SplashViewModel(private val context: Application) : AndroidViewModel(context) {
     val TAG = javaClass.simpleName
     val liveLoadingInterrupt: MutableLiveData<Boolean> by lazy { MutableLiveData<Boolean>() } // According this value To Show now Status
+    val livePgDialogNeedShow by lazy { MutableLiveData<Boolean>() }
+    val liveGetData by lazy { MutableLiveData<UserModelData>() }
     var urlString: String
-        get() = BaseSharePreference.getURLLink(application)
-        set(value) = BaseSharePreference.setURLLink(application, value)
+        get() = BaseSharePreference.getURLLink(context)
+        set(value) = BaseSharePreference.setURLLink(context, value)
 
     init {
 
@@ -37,70 +38,42 @@ class SplashViewModel(private val application: Application) : ViewModel() {
     }
 
     private val waitAPIDuration by lazy {
-        application.resources.getInteger(R.integer.wait_api_duration).toLong()
+        context.resources.getInteger(R.integer.wait_api_duration).toLong()
     }
 
+    var job: Job? = null
 
-    private var job: Job? = null
     fun getDataFromAPI() {
+        logi(TAG,"呼叫到 getDataFromAPI()")
 
         liveLoadingInterrupt.postValue(false)
-        val pgDialg: ProgressDialog = ProgressDialog(application).apply {
-            needClose = true
-            binding.ivClose.setOnClickListener {
-                dialog.dismiss()
-                liveLoadingInterrupt.postValue(true)
-                job?.cancel()
-            }
-        }
 
         job = viewModelScope.launch(Dispatchers.IO) {
 
-            viewModelScope.launch(Dispatchers.Main) {
-                if (!pgDialg.isShowing())
-                    pgDialg.show()
-            }
+            livePgDialogNeedShow.postValue(true)
             val startTime = Date().time
             var data: UserModelData? = null
-            var getDataFail = false
             try {
+
                 data = getUserData()
-                if (data == null || data.isEmpty()) {
-                    getDataFail  = true
-                    loge(TAG, "getUserData do not get the data.")
-                }
+
             } catch (e: Exception) {
                 e.printStackTrace()
-                getDataFail = true
-
             }
 
             delay(startTime.getWaitInterval(waitAPIDuration))
-            viewModelScope.launch(Dispatchers.Main) {
-                if (pgDialg.isShowing() && (application as? Activity)?.isFinishing == false) {
-                    pgDialg.dismiss()
-                }
-                if (getDataFail) {
-                    showMessageDialogOnlyOKButton(application, application.getString(R.string.error_dialog_title), application.getString(R.string.splash_no_data_get_error_message))
-                    liveLoadingInterrupt.postValue(true)
-                } else {
-                    //To Login
-                    val intent = Intent(application, LoginActivity::class.java)
-                    intent.putParcelableArrayListExtra(LoginActivity.KEY_USER_DATA, data)
-                    (application as? Activity)?.startActivity(intent)
-                    (application as? Activity)?.finish()
-                }
-            }
-        }
+            liveGetData.postValue(data)
+            livePgDialogNeedShow.postValue(false)
 
+        }
     }
 
     /**Get User Data*/
     @Throws(Exception::class)
     private fun getUserData(): UserModelData? {
-        val cell = ApiConnect.getService(application).getData()
+        val cell = ApiConnect.getService(context).getData()
         val response = cell.execute()
-        logi(TAG,"getUserData response is ===>$response")
+        logi(TAG, "getUserData response is ===>$response")
         return if (response.isSuccessful) {
 //            logi(TAG, response.body() ?: "no data")
             response.body()
@@ -108,12 +81,6 @@ class SplashViewModel(private val application: Application) : ViewModel() {
             loge(TAG, "API ERROR! this is error message：${response.errorBody()?.string()}")
             null
         }
-    }
-
-    override fun onCleared() {
-        job?.cancel()
-        super.onCleared()
-        loge(TAG, "ViewModelCleared.")
     }
 }
 

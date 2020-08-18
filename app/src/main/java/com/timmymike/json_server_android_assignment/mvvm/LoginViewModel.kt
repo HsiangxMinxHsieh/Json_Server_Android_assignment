@@ -1,11 +1,10 @@
 package com.timmymike.json_server_android_assignment.mvvm
 
 import android.app.Activity
+import android.app.Application
 import android.content.Context
 import android.content.Intent
-import androidx.lifecycle.ViewModel
-import androidx.lifecycle.ViewModelProvider
-import androidx.lifecycle.viewModelScope
+import androidx.lifecycle.*
 import com.google.gson.JsonObject
 import com.timmymike.json_server_android_assignment.MemberDetailActivity
 import com.timmymike.json_server_android_assignment.R
@@ -21,18 +20,19 @@ import java.util.*
 
 /**======== View Model ========*/
 
-class LoginViewModel(private val context: Context, private val userArray: ArrayList<UserModelData.UserModelItem>) : ViewModel() {
+class LoginViewModel(private val context: Application, private val userArray: ArrayList<UserModelData.UserModelItem>) : AndroidViewModel(context) {
     val TAG = javaClass.simpleName
 
     var account = ""
     var password = ""
-
+    val livePgDialogNeedShow by lazy { MutableLiveData<Boolean>() }
     private val loginDuration by lazy {
         context.resources.getInteger(R.integer.login_duration).toLong()
     }
     private var job: Job? = null
     private var textDialog: TextDialog? = null
     fun login() {
+
         loge(TAG, "now userArray before login is ===>$userArray")
         if (account == "" || password == "") {
             textDialog = showMessageDialogOnlyOKButton(context, context.getString(R.string.error_dialog_title), context.getString(R.string.login_account_or_password_empty)) {
@@ -41,14 +41,8 @@ class LoginViewModel(private val context: Context, private val userArray: ArrayL
             return
         }
 
-        val pgDialg = ProgressDialog(context)
-
         job = viewModelScope.launch(Dispatchers.IO) {
-
-            viewModelScope.launch(Dispatchers.Main) {
-                if (!pgDialg.isShowing())
-                    pgDialg.show()
-            }
+            livePgDialogNeedShow.postValue(true)
             val startTime = Date().time
 
             var isFail = false // if Account in userArray,But Password is incorrect, this boolean will be true
@@ -67,9 +61,7 @@ class LoginViewModel(private val context: Context, private val userArray: ArrayL
             delay(startTime.getWaitInterval(loginDuration))
 
             viewModelScope.launch(Dispatchers.Main) {
-                if (pgDialg.isShowing()) {
-                    pgDialg.dismiss()
-                }
+                livePgDialogNeedShow.postValue(false)
                 if (isFail) {//showTextDialog
                     textDialog = showMessageDialogOnlyOKButton(context, context.getString(R.string.error_dialog_title), context.getString(R.string.login_account_right_password_error)) {
                         textDialog = null
@@ -94,7 +86,6 @@ class LoginViewModel(private val context: Context, private val userArray: ArrayL
                 intent.putExtra(MemberDetailActivity.KEY_USER_DATA, userData)
                 (context as? Activity)?.startActivity(intent)
             }
-
 
         }
     }
@@ -124,15 +115,5 @@ class LoginViewModel(private val context: Context, private val userArray: ArrayL
     }
 
 
-}
-
-class ViewModelLoginFactory(private val context: Context, private val userArray: ArrayList<UserModelData.UserModelItem>) :
-    ViewModelProvider.Factory {
-    override fun <T : ViewModel> create(modelClass: Class<T>): T {
-        if (modelClass.isAssignableFrom(LoginViewModel::class.java)) {
-            return LoginViewModel(context, userArray) as T
-        }
-        throw IllegalArgumentException("Unknown ViewModel class")
-    }
 }
 

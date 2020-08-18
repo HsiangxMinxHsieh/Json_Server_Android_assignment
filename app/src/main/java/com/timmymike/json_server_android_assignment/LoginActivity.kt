@@ -4,11 +4,12 @@ import android.content.Context
 import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
 import androidx.databinding.DataBindingUtil
+import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import com.timmymike.json_server_android_assignment.api.model.UserModelData
 import com.timmymike.json_server_android_assignment.databinding.ActivityLoginBinding
 import com.timmymike.json_server_android_assignment.mvvm.LoginViewModel
-import com.timmymike.json_server_android_assignment.mvvm.ViewModelLoginFactory
+import com.timmymike.json_server_android_assignment.tools.dialog.ProgressDialog
 import com.timmymike.json_server_android_assignment.tools.setTextSize
 
 class LoginActivity : AppCompatActivity() {
@@ -22,6 +23,9 @@ class LoginActivity : AppCompatActivity() {
     private var userDataArray = ArrayList<UserModelData.UserModelItem>()
     private lateinit var viewModel: LoginViewModel
     private lateinit var loginBinding: ActivityLoginBinding
+
+    val pgDialg: ProgressDialog by lazy { ProgressDialog(context) }
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         loginBinding = DataBindingUtil.setContentView(activity, R.layout.activity_login)
@@ -31,8 +35,9 @@ class LoginActivity : AppCompatActivity() {
         initView()
 
         initMvvm()
-    }
 
+        initObserver()
+    }
 
 
     private fun initData() {
@@ -50,9 +55,20 @@ class LoginActivity : AppCompatActivity() {
     }
 
     private fun initMvvm() {
-        viewModel = ViewModelProvider(activity, ViewModelLoginFactory(context, userDataArray)).get(LoginViewModel::class.java)
+        viewModel = ViewModelProvider(activity, ViewModelProvider.AndroidViewModelFactory(application)).get(LoginViewModel::class.java)
 
         loginBinding.viewModel = viewModel
         loginBinding.lifecycleOwner = activity
+    }
+
+    private fun initObserver() {
+        viewModel.livePgDialogNeedShow.observe(activity, Observer {
+            if (it )
+                pgDialg.show()
+            else
+                pgDialg.dismiss()
+        })
+
+
     }
 }
