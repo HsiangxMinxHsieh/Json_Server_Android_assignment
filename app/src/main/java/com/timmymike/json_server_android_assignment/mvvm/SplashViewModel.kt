@@ -1,11 +1,10 @@
 package com.timmymike.json_server_android_assignment.mvvm
 
 import android.app.Activity
-import android.content.Context
+import android.app.Application
 import android.content.Intent
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
-import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.viewModelScope
 import com.timmymike.json_server_android_assignment.LoginActivity
 import com.timmymike.json_server_android_assignment.R
@@ -25,12 +24,12 @@ import java.util.*
 
 /**======== View Model ========*/
 
-class SplashViewModel(private val context: Context) : ViewModel() {
+class SplashViewModel(private val application: Application) : ViewModel() {
     val TAG = javaClass.simpleName
     val liveLoadingInterrupt: MutableLiveData<Boolean> by lazy { MutableLiveData<Boolean>() } // According this value To Show now Status
     var urlString: String
-        get() = BaseSharePreference.getURLLink(context)
-        set(value) = BaseSharePreference.setURLLink(context, value)
+        get() = BaseSharePreference.getURLLink(application)
+        set(value) = BaseSharePreference.setURLLink(application, value)
 
     init {
 
@@ -38,7 +37,7 @@ class SplashViewModel(private val context: Context) : ViewModel() {
     }
 
     private val waitAPIDuration by lazy {
-        context.resources.getInteger(R.integer.wait_api_duration).toLong()
+        application.resources.getInteger(R.integer.wait_api_duration).toLong()
     }
 
 
@@ -46,7 +45,7 @@ class SplashViewModel(private val context: Context) : ViewModel() {
     fun getDataFromAPI() {
 
         liveLoadingInterrupt.postValue(false)
-        val pgDialg: ProgressDialog = ProgressDialog(context).apply {
+        val pgDialg: ProgressDialog = ProgressDialog(application).apply {
             needClose = true
             binding.ivClose.setOnClickListener {
                 dialog.dismiss()
@@ -78,18 +77,18 @@ class SplashViewModel(private val context: Context) : ViewModel() {
 
             delay(startTime.getWaitInterval(waitAPIDuration))
             viewModelScope.launch(Dispatchers.Main) {
-                if (pgDialg.isShowing() && (context as? Activity)?.isFinishing == false) {
+                if (pgDialg.isShowing() && (application as? Activity)?.isFinishing == false) {
                     pgDialg.dismiss()
                 }
                 if (getDataFail) {
-                    showMessageDialogOnlyOKButton(context, context.getString(R.string.error_dialog_title), context.getString(R.string.splash_no_data_get_error_message))
+                    showMessageDialogOnlyOKButton(application, application.getString(R.string.error_dialog_title), application.getString(R.string.splash_no_data_get_error_message))
                     liveLoadingInterrupt.postValue(true)
                 } else {
                     //To Login
-                    val intent = Intent(context, LoginActivity::class.java)
+                    val intent = Intent(application, LoginActivity::class.java)
                     intent.putParcelableArrayListExtra(LoginActivity.KEY_USER_DATA, data)
-                    (context as? Activity)?.startActivity(intent)
-                    (context as? Activity)?.finish()
+                    (application as? Activity)?.startActivity(intent)
+                    (application as? Activity)?.finish()
                 }
             }
         }
@@ -99,7 +98,7 @@ class SplashViewModel(private val context: Context) : ViewModel() {
     /**Get User Data*/
     @Throws(Exception::class)
     private fun getUserData(): UserModelData? {
-        val cell = ApiConnect.getService(context).getData()
+        val cell = ApiConnect.getService(application).getData()
         val response = cell.execute()
         logi(TAG,"getUserData response is ===>$response")
         return if (response.isSuccessful) {
@@ -118,13 +117,4 @@ class SplashViewModel(private val context: Context) : ViewModel() {
     }
 }
 
-class ViewModelSplashFactory(private val context: Context) :
-    ViewModelProvider.Factory {
-    override fun <T : ViewModel> create(modelClass: Class<T>): T {
-        if (modelClass.isAssignableFrom(SplashViewModel::class.java)) {
-            return SplashViewModel(context) as T
-        }
-        throw IllegalArgumentException("Unknown ViewModel class")
-    }
-}
 

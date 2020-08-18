@@ -6,7 +6,6 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.databinding.DataBindingUtil
 import androidx.lifecycle.ViewModelProvider
 import com.timmymike.json_server_android_assignment.mvvm.SplashViewModel
-import com.timmymike.json_server_android_assignment.mvvm.ViewModelSplashFactory
 import com.timmymike.json_server_android_assignment.databinding.ActivitySplashSettingBinding
 import com.timmymike.json_server_android_assignment.tools.setTextSize
 
@@ -33,7 +32,7 @@ class SplashSettingActivity : AppCompatActivity() {
     }
 
     private fun initMvvm() {
-        viewModel = ViewModelProvider(activity, ViewModelSplashFactory(context)).get(SplashViewModel::class.java)
+        viewModel = ViewModelProvider(activity, ViewModelProvider.AndroidViewModelFactory(application)).get(SplashViewModel::class.java)
 
         splashBinding.viewModel = viewModel
         splashBinding.lifecycleOwner = activity
