@@ -33,7 +33,7 @@ If the server is not response (or other error due to this app can't get data in 
   
   
 At last you can find my apk in here:<BR>
-https://github.com/HsiangxMinxHsieh/Json_Server_Android_assignment/blob/master/readMeData/Android_assignment_debug_1.0.0_1.apk<BR>
+https://github.com/HsiangxMinxHsieh/Json_Server_Android_assignment/blob/master/readMeData/Android_assignment_debug_2.0_2.apk<BR>
   
 and db.json(test data) in here:<BR>
 https://github.com/HsiangxMinxHsieh/Json_Server_Android_assignment/blob/master/readMeData/db.json<BR>
