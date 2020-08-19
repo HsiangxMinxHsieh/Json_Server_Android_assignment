@@ -30,6 +30,8 @@ class TextDialog(val context: Context) {
 
     val dialog by lazy { MaterialDialog(context) }
     val dialogBinding by lazy { DataBindingUtil.inflate<DialogTextBinding>(LayoutInflater.from(context), R.layout.dialog_text, null, false) }
+    fun isShowing(): Boolean = dialog.isShowing
+    fun dismiss() = dialog.dismiss()
     fun show() {
         if (dialog.isShowing) {
             return
