@@ -100,7 +100,7 @@ class LoginViewModel(private val context: Application, val userArray: ArrayList<
             addProperty("password", user.password)
         }
 
-        val cell = ApiConnect.getService(context).uploadData(BaseSharePreference.getURLLink(context),json)
+        val cell = ApiConnect.getInstance(context).uploadData(BaseSharePreference.getURLLink(context),json)
         val response = cell.execute()
         return if (response.isSuccessful) {
             response.body()

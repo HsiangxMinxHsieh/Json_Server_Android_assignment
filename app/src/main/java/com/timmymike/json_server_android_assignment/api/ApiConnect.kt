@@ -8,8 +8,9 @@ import java.util.concurrent.TimeUnit
 
 object ApiConnect {
     const val def_url = "http://10.0.3.2:3000/users/"
-    var apiService: ApiService? = null
-    fun getService(context: Context): ApiService {
+    private var apiService: ApiService? = null
+
+    fun getInstance(context: Context): ApiService {
         if (apiService == null) {
             apiService = init(context)
         }

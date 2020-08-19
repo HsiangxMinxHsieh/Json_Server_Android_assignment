@@ -66,7 +66,7 @@ class SplashViewModel(private val context: Application) : AndroidViewModel(conte
     /**Get User Data*/
     @Throws(Exception::class)
     private fun getUserData(): UserModelData? {
-        val cell = ApiConnect.getService(context).getData(BaseSharePreference.getURLLink(context))
+        val cell = ApiConnect.getInstance(context).getData(BaseSharePreference.getURLLink(context))
         val response = cell.execute()
         logi(TAG, "getUserData response is ===>$response")
         return if (response.isSuccessful) {
