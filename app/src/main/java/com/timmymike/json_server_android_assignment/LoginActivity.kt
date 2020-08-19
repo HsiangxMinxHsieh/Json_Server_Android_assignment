@@ -112,7 +112,7 @@ class LoginActivity : AppCompatActivity() {
                 //to Member Page
                 intent.putExtra(MemberDetailActivity.KEY_USER_DATA, userData)
                 activity.startActivity(intent)
-
+                viewModel.liveStatus.postValue(LoginViewModel.Status.Initial)
             }
         })
         liveShowDialog.observe(activity, Observer {

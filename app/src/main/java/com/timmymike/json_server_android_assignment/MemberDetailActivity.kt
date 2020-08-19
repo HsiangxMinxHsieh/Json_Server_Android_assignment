@@ -4,11 +4,13 @@ import android.content.Context
 import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
 import androidx.databinding.DataBindingUtil
+import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import com.timmymike.json_server_android_assignment.api.model.UserModelData
 import com.timmymike.json_server_android_assignment.databinding.ActivityMemberDetailBinding
 import com.timmymike.json_server_android_assignment.mvvm.MemberDetailViewModel
-import com.timmymike.json_server_android_assignment.mvvm.ViewModelMemberFactory
+import com.timmymike.json_server_android_assignment.mvvm.ViewMemberFactory
+import com.timmymike.json_server_android_assignment.tools.loge
 import com.timmymike.json_server_android_assignment.tools.setTextSize
 import java.io.Serializable
 
@@ -17,12 +19,11 @@ class MemberDetailActivity : AppCompatActivity() {
         const val KEY_USER_DATA = "KEY_USER_DATA"
         const val KEY_LOGIN_METHOD = "KEY_LOGIN_METHOD"
 
-        enum class LoginMethod:Serializable {
+        enum class LoginMethod : Serializable {
             SignUp,
             Login
         }
     }
-
     private val context: Context = this
     private val activity = this
     private var userData: UserModelData.UserModelItem? = null
@@ -32,6 +33,9 @@ class MemberDetailActivity : AppCompatActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+
+        loge("MemberDetailActivity","MemberDetailActivity初始化了")
+
         memberBinding = DataBindingUtil.setContentView(activity, R.layout.activity_member_detail)
 
         initData()
@@ -40,8 +44,9 @@ class MemberDetailActivity : AppCompatActivity() {
 
         initMvvm()
 
-    }
+        initObserver()
 
+    }
 
     private fun initData() {
         try {
@@ -62,10 +67,16 @@ class MemberDetailActivity : AppCompatActivity() {
     }
 
     private fun initMvvm() {
-        viewModel = ViewModelProvider(activity, ViewModelMemberFactory(context, loginStatus,userData ?: UserModelData.UserModelItem())).get(MemberDetailViewModel::class.java)
+        viewModel = ViewModelProvider(activity, ViewMemberFactory(application, loginStatus, userData ?: UserModelData.UserModelItem())).get(MemberDetailViewModel::class.java)
 
         memberBinding.viewModel = viewModel
         memberBinding.lifecycleOwner = activity
     }
 
+    private fun initObserver() {
+        viewModel.liveNeedFinish.observe(activity, Observer {
+            if (it)
+                activity.finish()
+        })
+    }
 }

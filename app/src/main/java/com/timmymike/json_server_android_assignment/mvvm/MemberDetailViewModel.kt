@@ -1,31 +1,33 @@
 package com.timmymike.json_server_android_assignment.mvvm
 
-import android.app.Activity
-import android.content.Context
+import android.app.Application
+import androidx.lifecycle.AndroidViewModel
+import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
 import com.timmymike.json_server_android_assignment.MemberDetailActivity
 import com.timmymike.json_server_android_assignment.R
 import com.timmymike.json_server_android_assignment.api.model.UserModelData
-import com.timmymike.json_server_android_assignment.tools.dialog.TextDialog
 import com.timmymike.json_server_android_assignment.tools.formatByResourceID
 import com.timmymike.json_server_android_assignment.tools.loge
 
 /**======== View Model ========*/
 
-class MemberDetailViewModel(private val context: Context, private val loginMethod: MemberDetailActivity.Companion.LoginMethod, private val userData: UserModelData.UserModelItem) : ViewModel() {
+class MemberDetailViewModel(private val context: Application, private val loginMethod: MemberDetailActivity.Companion.LoginMethod, private val userData: UserModelData.UserModelItem) : AndroidViewModel(context) {
     val TAG = javaClass.simpleName
 
     var id = ""
     var account = ""
     var password = ""
     var loginMethodShowString = ""
+    val liveNeedFinish by lazy { MutableLiveData<Boolean>() }
 
     init {
-        id = userData.id.toString().formatByResourceID(context,R.string.member_id)
-        account = userData.account.formatByResourceID(context,R.string.member_account)
-        password = userData.password.getCircleByLength().formatByResourceID(context,R.string.member_password)
-        loge(TAG,"ID===>$id")
+        loge("MemberDetailViewModel","MemberDetailViewModel 初始化了")
+        id = userData.id.toString().formatByResourceID(context, R.string.member_id)
+        account = userData.account.formatByResourceID(context, R.string.member_account)
+        password = userData.password.getCircleByLength().formatByResourceID(context, R.string.member_password)
+        loge(TAG, "ID===>$id")
         showData()
     }
 
@@ -48,17 +50,12 @@ class MemberDetailViewModel(private val context: Context, private val loginMetho
     }
 
     fun back() {
-        (context as? Activity)?.onBackPressed()
+        liveNeedFinish.postValue(true)
     }
 }
 
-class ViewModelMemberFactory(private val context: Context, private val loginMethod: MemberDetailActivity.Companion.LoginMethod, private val userData: UserModelData.UserModelItem) :
-    ViewModelProvider.Factory {
-    override fun <T : ViewModel> create(modelClass: Class<T>): T {
-        if (modelClass.isAssignableFrom(MemberDetailViewModel::class.java)) {
-            return MemberDetailViewModel(context, loginMethod, userData) as T
-        }
-        throw IllegalArgumentException("Unknown ViewModel class")
+class ViewMemberFactory(private val application: Application, private val loginMethod: MemberDetailActivity.Companion.LoginMethod, private val userData: UserModelData.UserModelItem) : ViewModelProvider.NewInstanceFactory() {
+    override fun <T : ViewModel?> create(modelClass: Class<T>): T {
+        return MemberDetailViewModel(application, loginMethod, userData) as T
     }
 }
-
