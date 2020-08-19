@@ -24,6 +24,7 @@ class MemberDetailActivity : AppCompatActivity() {
             Login
         }
     }
+
     private val context: Context = this
     private val activity = this
     private var userData: UserModelData.UserModelItem? = null
@@ -33,8 +34,6 @@ class MemberDetailActivity : AppCompatActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-
-        loge("MemberDetailActivity","MemberDetailActivity初始化了")
 
         memberBinding = DataBindingUtil.setContentView(activity, R.layout.activity_member_detail)
 

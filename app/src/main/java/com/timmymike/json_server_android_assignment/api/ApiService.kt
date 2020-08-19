@@ -8,11 +8,11 @@ import retrofit2.http.*
 interface ApiService {
 
     @Headers("Content-Type: application/json", "Accept: application/json")
-    @GET(".")
-    fun getData(): Call<UserModelData>
+    @GET
+    fun getData(@Url url :String): Call<UserModelData>
 
     @Headers("Content-Type: application/json", "Accept: application/json")
-    @POST(".")
-    fun uploadData(@Body jsonObject: JsonObject): Call<UserModelData.UserModelItem>
+    @POST
+    fun uploadData(@Url url :String,@Body jsonObject: JsonObject): Call<UserModelData.UserModelItem>
 
 }

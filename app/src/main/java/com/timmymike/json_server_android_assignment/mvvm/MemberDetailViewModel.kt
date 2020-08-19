@@ -23,7 +23,6 @@ class MemberDetailViewModel(private val context: Application, private val loginM
     val liveNeedFinish by lazy { MutableLiveData<Boolean>() }
 
     init {
-        loge("MemberDetailViewModel","MemberDetailViewModel 初始化了")
         id = userData.id.toString().formatByResourceID(context, R.string.member_id)
         account = userData.account.formatByResourceID(context, R.string.member_account)
         password = userData.password.getCircleByLength().formatByResourceID(context, R.string.member_password)

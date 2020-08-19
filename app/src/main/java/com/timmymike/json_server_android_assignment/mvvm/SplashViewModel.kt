@@ -1,17 +1,13 @@
 package com.timmymike.json_server_android_assignment.mvvm
 
-import android.app.Activity
 import android.app.Application
-import android.content.Intent
 import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.viewModelScope
-import com.timmymike.json_server_android_assignment.LoginActivity
 import com.timmymike.json_server_android_assignment.R
 import com.timmymike.json_server_android_assignment.api.ApiConnect
 import com.timmymike.json_server_android_assignment.api.model.UserModelData
 import com.timmymike.json_server_android_assignment.tools.BaseSharePreference
-import com.timmymike.json_server_android_assignment.tools.dialog.showMessageDialogOnlyOKButton
 import com.timmymike.json_server_android_assignment.tools.getWaitInterval
 import com.timmymike.json_server_android_assignment.tools.loge
 import com.timmymike.json_server_android_assignment.tools.logi
@@ -44,7 +40,6 @@ class SplashViewModel(private val context: Application) : AndroidViewModel(conte
     var job: Job? = null
 
     fun getDataFromAPI() {
-        logi(TAG,"呼叫到 getDataFromAPI()")
 
         liveLoadingInterrupt.postValue(false)
 
@@ -71,7 +66,7 @@ class SplashViewModel(private val context: Application) : AndroidViewModel(conte
     /**Get User Data*/
     @Throws(Exception::class)
     private fun getUserData(): UserModelData? {
-        val cell = ApiConnect.getService(context).getData()
+        val cell = ApiConnect.getService(context).getData(BaseSharePreference.getURLLink(context))
         val response = cell.execute()
         logi(TAG, "getUserData response is ===>$response")
         return if (response.isSuccessful) {

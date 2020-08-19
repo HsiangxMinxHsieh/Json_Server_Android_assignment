@@ -8,7 +8,6 @@ import androidx.databinding.DataBindingUtil
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
-import androidx.lifecycle.ViewModelProviders
 import com.timmymike.json_server_android_assignment.api.model.UserModelData
 import com.timmymike.json_server_android_assignment.databinding.ActivityLoginBinding
 import com.timmymike.json_server_android_assignment.mvvm.LoginFactory
@@ -65,7 +64,7 @@ class LoginActivity : AppCompatActivity() {
     }
 
     private fun initMvvm() {
-        viewModel =  ViewModelProvider(activity, LoginFactory(activity.application, userDataArray)).get<LoginViewModel>(LoginViewModel::class.java)
+        viewModel = ViewModelProvider(activity, LoginFactory(activity.application, userDataArray)).get<LoginViewModel>(LoginViewModel::class.java)
         loginBinding.viewModel = viewModel
         loginBinding.lifecycleOwner = activity
     }

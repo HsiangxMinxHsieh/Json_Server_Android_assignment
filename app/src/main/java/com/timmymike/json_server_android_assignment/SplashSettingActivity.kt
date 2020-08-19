@@ -45,12 +45,10 @@ class SplashSettingActivity : AppCompatActivity() {
 
     }
 
-
-
     private fun initObserver() {
 
         viewModel.livePgDialogNeedShow.observe(activity, Observer {
-            if (it )
+            if (it)
                 pgDialg.show()
             else
                 pgDialg.dismiss()
@@ -62,7 +60,7 @@ class SplashSettingActivity : AppCompatActivity() {
                 loge(TAG, "getUserData do not get the data.")
                 viewModel.liveLoadingInterrupt.postValue(true)
                 showMessageDialogOnlyOKButton(context, context.getString(R.string.error_dialog_title), context.getString(R.string.splash_no_data_get_error_message))
-            }else{
+            } else {
                 //To Login
                 val intent = Intent(context, LoginActivity::class.java)
                 intent.putParcelableArrayListExtra(LoginActivity.KEY_USER_DATA, it)
@@ -86,7 +84,7 @@ class SplashSettingActivity : AppCompatActivity() {
 
     override fun onDestroy() {
         super.onDestroy()
-        if(pgDialg.isShowing())
+        if (pgDialg.isShowing())
             pgDialg.dismiss()
     }
 

@@ -10,12 +10,10 @@ import com.google.gson.JsonObject
 import com.timmymike.json_server_android_assignment.R
 import com.timmymike.json_server_android_assignment.api.ApiConnect
 import com.timmymike.json_server_android_assignment.api.model.UserModelData
-import com.timmymike.json_server_android_assignment.tools.dialog.TextDialog
-import com.timmymike.json_server_android_assignment.tools.dialog.showMessageDialogOnlyOKButton
+import com.timmymike.json_server_android_assignment.tools.BaseSharePreference
 import com.timmymike.json_server_android_assignment.tools.getWaitInterval
 import com.timmymike.json_server_android_assignment.tools.loge
 import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.Job
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 import java.util.*
@@ -30,6 +28,7 @@ class LoginViewModel(private val context: Application, val userArray: ArrayList<
     var password = ""
     val livePgDialogNeedShow by lazy { MutableLiveData<Boolean>() }
     var userIndex = 0
+
     /**
      * Status Code (Enum)
      * */
@@ -55,7 +54,7 @@ class LoginViewModel(private val context: Application, val userArray: ArrayList<
             return
         }
 
-       viewModelScope.launch(Dispatchers.IO) {
+        viewModelScope.launch(Dispatchers.IO) {
             initLiveDataValue()
             val startTime = Date().time
             var isFail = false // if Account in userArray,But Password is incorrect, this boolean will be true
@@ -101,7 +100,7 @@ class LoginViewModel(private val context: Application, val userArray: ArrayList<
             addProperty("password", user.password)
         }
 
-        val cell = ApiConnect.getService(context).uploadData(json)
+        val cell = ApiConnect.getService(context).uploadData(BaseSharePreference.getURLLink(context),json)
         val response = cell.execute()
         return if (response.isSuccessful) {
             response.body()
@@ -110,12 +109,10 @@ class LoginViewModel(private val context: Application, val userArray: ArrayList<
             null
         }
     }
-
-
-
 }
+
 class LoginFactory(private val application: Application, private val userArray: ArrayList<UserModelData.UserModelItem>) : NewInstanceFactory() {
     override fun <T : ViewModel?> create(modelClass: Class<T>): T {
-        return  LoginViewModel(application, userArray) as T
+        return LoginViewModel(application, userArray) as T
     }
 }
